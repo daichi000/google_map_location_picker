@@ -80,12 +80,60 @@ class MapPickerState extends State<MapPicker> {
 
   String _placeId;
 
+  double _radius = 100.0;
+
+  // Set<Circle> _circles = new HashSet<circle>();
+  Set<Circle> _circle = {};
+
+  // double radius;
+  // int _circleIdCounter = 1;
+
   void _onToggleMapTypePressed() {
     final MapType nextType =
         MapType.values[(_currentMapType.index + 1) % MapType.values.length];
 
     setState(() => _currentMapType = nextType);
   }
+
+  void _changeRadius(double nextRadius) {
+    // final Double nextRadius = Double.radius;
+
+    setState(() => _radius = nextRadius);
+    print('nextnext');
+    if (_circle.isNotEmpty) {
+      _circle.clear();
+    }
+    setState(() {
+      _circle.add(Circle(
+        circleId: CircleId('123'),
+        fillColor: Colors.transparent,
+        strokeColor: Color(0xFF6EBAB0),
+        strokeWidth: 4,
+        center: _lastMapPosition,
+        radius: nextRadius,
+        onTap: () => print('test'),
+        consumeTapEvents: true,
+      ));
+    });
+  }
+
+
+  // void _setCircles(LatLng point) {
+  //   // final String circleIdVal = 'circle_id_$_circleIdCounter';
+  //   // _circleIdCounter++;
+  //   // print(
+  //   //   'Circle | Latitude: ${point.latitude} Longitude: ${point.longitude} Radius: $radius');
+  //   _circles.add(Circle(
+  //     // circleId: CircleId(circleIdVal),
+  //     circleId: CircleId('123'),
+  //     center: point,
+  //     radius: 300,
+  //     fillColor: Colors.redAccent.withOpacity(0.5),
+  //     strokeWidth: 3,
+  //     strokeColor: Colors.redAccent
+  //   ));
+  // }
+
 
   // this also checks for location permission.
   Future<void> _initCurrentLocation() async {
@@ -175,8 +223,25 @@ class MapPickerState extends State<MapPicker> {
             },
             onCameraIdle: () async {
               print("onCameraIdle#_lastMapPosition = $_lastMapPosition");
+              // print(locationProvider.lastIdleLocation);
               LocationProvider.of(context, listen: false)
                   .setLastIdleLocation(_lastMapPosition);
+              // _setCircles(_lastMapPosition);
+              if (_circle.isNotEmpty) {
+                _circle.clear();
+              }
+              setState(() {
+                _circle.add(Circle(
+                  circleId: CircleId('123'),
+                  fillColor: Colors.transparent,
+                  strokeColor: Color(0xFF6EBAB0),
+                  strokeWidth: 4,
+                  center: _lastMapPosition == null ? LatLng(37.78583393502708, -122.40641713142396) : _lastMapPosition,
+                  radius: _radius,
+                  onTap: () => print('test'),
+                  consumeTapEvents: true,
+                ));
+              });
             },
             onCameraMoveStarted: () {
               print("onCameraMoveStarted#_lastMapPosition = $_lastMapPosition");
@@ -186,6 +251,18 @@ class MapPickerState extends State<MapPicker> {
 //            },
             mapType: _currentMapType,
             myLocationEnabled: true,
+            circles: _circle,
+            // circles: [
+            //   Circle(
+            //     circleId: CircleId('123'),
+            //     fillColor: Colors.red,
+            //     strokeColor: Colors.red,
+            //     center: _lastMapPosition == null ? LatLng(32.78583393502708, -122.40641713142396) : _lastMapPosition,
+            //     radius: 300,
+            //     onTap: () => print('test'),
+            //     consumeTapEvents: true,
+            //   )
+            // ].toSet(),
           ),
           _MapFabs(
             myLocationButtonEnabled: widget.myLocationButtonEnabled,
@@ -195,65 +272,192 @@ class MapPickerState extends State<MapPicker> {
           ),
           pin(),
           locationCard(),
+          // arrowIcon(),
         ],
       ),
     );
   }
+
+  // String _radius = '100';
+  Widget arrowIcon() {
+
+    return Align(
+      alignment: widget.resultCardAlignment ?? Alignment.bottomCenter,
+      child: Padding(
+        padding: widget.resultCardPadding ?? EdgeInsets.all(16.0),
+        // child: Card(
+        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: Consumer<LocationProvider>(
+              builder: (context, locationProvider, _) {
+                // return FloatingActionButton(
+                //   onPressed: () {
+                //     Navigator.of(context).pop({
+                //       'location': LocationResult(
+                //         latLng: locationProvider.lastIdleLocation,
+                //         address: _address,
+                //         placeId: _placeId,
+                //       )
+                //     });
+                //   },
+                //   child: widget.resultCardConfirmIcon ??
+                //       Icon(Icons.arrow_forward),
+                // );
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Positioned(
+                        bottom: 20.0,
+                        left: 10.0,
+                        right: 10.0,
+                        // child: Card(
+                        //     child: BlocBuilder(
+                        //       builder: (context, state) {
+                        //         return Column(
+
+                        child: Row(
+                          children: <Widget>[
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text(_radius.toInt().toString() + ' M'),
+                                // Text('100 Mtrs'),
+                                Slider(
+                                  max: 1000,
+                                  min: 100,
+                                  value: _radius,
+                                  activeColor: Color(0xFF6EBAB0),
+                                  inactiveColor: Colors.grey,
+                                  divisions: 12,
+                                  onChanged: (double value) {
+                                    // if (!widget.isRadiusFixed) {
+                                    //   _mapsBloc.dispatch(UpdateRangeValues(radius: value));
+                                    // }
+                                    _changeRadius(value);
+                                    print(value);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ),
+                      Positioned (
+                        bottom: 20.0,
+                        left: 5.0,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context).pop({
+                              'location': LocationResult(
+                                latLng: locationProvider.lastIdleLocation,
+                                address: _address,
+                                placeId: _placeId,
+                              )
+                            });
+                          },
+                          child: widget.resultCardConfirmIcon ??
+                              Icon(Icons.arrow_forward),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }),
+      ),
+    );
+  }
+
 
   Widget locationCard() {
     return Align(
       alignment: widget.resultCardAlignment ?? Alignment.bottomCenter,
       child: Padding(
         padding: widget.resultCardPadding ?? EdgeInsets.all(16.0),
-        child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: Consumer<LocationProvider>(
-              builder: (context, locationProvider, _) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Flexible(
-                    flex: 20,
-                    child: FutureLoadingBuilder<Map<String, String>>(
-                      future: getAddress(locationProvider.lastIdleLocation),
-                      mutable: true,
-                      loadingIndicator: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircularProgressIndicator(),
-                        ],
-                      ),
-                      builder: (context, data) {
-                        _address = data["address"];
-                        _placeId = data["placeId"];
-                        return Text(
-                          _address ?? 'Unnamed place',
-                          style: TextStyle(fontSize: 18),
-                        );
+        child: Consumer<LocationProvider>(
+            builder: (context, locationProvider, _) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(_radius.toInt().toString() + ' M'),
+                    // Text('100 Mtrs'),
+                    Slider(
+                      max: 1000,
+                      min: 100,
+                      value: _radius,
+                      activeColor: Color(0xFF6EBAB0),
+                      inactiveColor: Colors.grey,
+                      divisions: 12,
+                      onChanged: (double value) {
+                        // if (!widget.isRadiusFixed) {
+                        //   _mapsBloc.dispatch(UpdateRangeValues(radius: value));
+                        // }
+                        _changeRadius(value);
+                        print(value);
                       },
                     ),
-                  ),
-                  Spacer(),
-                  FloatingActionButton(
-                    onPressed: () {
-                      Navigator.of(context).pop({
-                        'location': LocationResult(
-                          latLng: locationProvider.lastIdleLocation,
-                          address: _address,
-                          placeId: _placeId,
-                        )
-                      });
+                  ],
+                ),
+                // Flexible(
+                //   flex: 0,
+                //   child: FutureLoadingBuilder<Map<String, String>>(
+                //     future: getAddress(locationProvider.lastIdleLocation),
+                //     mutable: true,
+                //     loadingIndicator: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: <Widget>[
+                //         CircularProgressIndicator(),
+                //       ],
+                //     ),
+                //     builder: (context, data) {
+                //       _address = data["address"];
+                //       _placeId = data["placeId"];
+                //       return Text(
+                //         _address ?? 'Unnamed place',
+                //         style: TextStyle(fontSize: 18, display: 'none'),
+                //       );
+                //     },
+                //   ),
+                // ),
+                // Spacer(),
+                FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).pop({
+                      'location': LocationResult(
+                        latLng: locationProvider.lastIdleLocation,
+                        address: _address,
+                        placeId: _placeId,
+                      )
+                    });
+                  },
+                  // child: widget.resultCardConfirmIcon ??
+                  //     Icon(Icons.arrow_forward),
+                  child: FutureLoadingBuilder<Map<String, String>>(
+                    future: getAddress(locationProvider.lastIdleLocation),
+                    mutable: true,
+                    loadingIndicator: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                    builder: (context, data) {
+                      _address = data["address"];
+                      _placeId = data["placeId"];
+                      return Icon(Icons.arrow_forward);
                     },
-                    child: widget.resultCardConfirmIcon ??
-                        Icon(Icons.arrow_forward),
                   ),
-                ],
-              ),
-            );
-          }),
-        ),
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
