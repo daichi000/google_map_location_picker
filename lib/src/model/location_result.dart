@@ -18,6 +18,6 @@ class LocationResult {
 
   @override
   String toString() {
-    return 'LocationResult{address: $address, latLng: $latLng, placeId: $placeId}';
+    return 'LocationResult{address: $address, latLng: $latLng, placeId: $placeId, radius: $radius}';
   }
 }
