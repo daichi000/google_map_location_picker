@@ -342,7 +342,7 @@ class MapPickerState extends State<MapPicker> {
                         latLng: locationProvider.lastIdleLocation,
                         address: _address,
                         placeId: _placeId,
-                        radius: _radius,
+                        radius: _radius.toInt().toString(),
                       )
                     });
                   },
