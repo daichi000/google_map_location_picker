@@ -332,6 +332,8 @@ class LocationPickerState extends State<LocationPicker> {
 
       String placeId = responseJson['results'][0]['place_id'];
 
+      double radius = responseJson['results'][0]['radius'];
+
       if (responseJson['status'] == 'REQUEST_DENIED') {
         road = 'REQUEST DENIED = please see log for more details';
         print(responseJson['error_message']);
@@ -348,6 +350,7 @@ class LocationPickerState extends State<LocationPicker> {
         locationResult.address = road;
         locationResult.latLng = latLng;
         locationResult.placeId = placeId;
+        locationResult.radius = radius;
       });
     }
   }
