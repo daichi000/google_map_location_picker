@@ -360,7 +360,6 @@ class MapPickerState extends State<MapPicker> {
                     builder: (context, data) {
                       _address = data["address"];
                       _placeId = data["placeId"];
-                      _radius = data["radius"] as double;
                       return Icon(Icons.arrow_forward);
                     },
                   ),
