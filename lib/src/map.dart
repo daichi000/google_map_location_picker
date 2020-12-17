@@ -360,6 +360,7 @@ class MapPickerState extends State<MapPicker> {
                     builder: (context, data) {
                       _address = data["address"];
                       _placeId = data["placeId"];
+                      _radius = data["radius"] as double;
                       return Icon(Icons.arrow_forward);
                     },
                   ),
@@ -384,13 +385,14 @@ class MapPickerState extends State<MapPicker> {
 
       return {
         "placeId": response['results'][0]['place_id'],
-        "address": response['results'][0]['formatted_address']
+        "address": response['results'][0]['formatted_address'],
+        "radius": response['results'][0]['radius']
       };
     } catch (e) {
       print(e);
     }
 
-    return {"placeId": null, "address": null};
+    return {"placeId": null, "address": null, "radius": null};
   }
 
   Widget pin() {
