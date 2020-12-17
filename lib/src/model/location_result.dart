@@ -12,8 +12,9 @@ class LocationResult {
 
   /// Latitude/Longitude of the selected location.
   LatLng latLng;
+  double radius;
 
-  LocationResult({this.latLng, this.address, this.placeId});
+  LocationResult({this.latLng, this.address, this.placeId, this.radius});
 
   @override
   String toString() {

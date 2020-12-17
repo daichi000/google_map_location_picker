@@ -278,97 +278,6 @@ class MapPickerState extends State<MapPicker> {
     );
   }
 
-  // String _radius = '100';
-  Widget arrowIcon() {
-
-    return Align(
-      alignment: widget.resultCardAlignment ?? Alignment.bottomCenter,
-      child: Padding(
-        padding: widget.resultCardPadding ?? EdgeInsets.all(16.0),
-        // child: Card(
-        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: Consumer<LocationProvider>(
-              builder: (context, locationProvider, _) {
-                // return FloatingActionButton(
-                //   onPressed: () {
-                //     Navigator.of(context).pop({
-                //       'location': LocationResult(
-                //         latLng: locationProvider.lastIdleLocation,
-                //         address: _address,
-                //         placeId: _placeId,
-                //       )
-                //     });
-                //   },
-                //   child: widget.resultCardConfirmIcon ??
-                //       Icon(Icons.arrow_forward),
-                // );
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Positioned(
-                        bottom: 20.0,
-                        left: 10.0,
-                        right: 10.0,
-                        // child: Card(
-                        //     child: BlocBuilder(
-                        //       builder: (context, state) {
-                        //         return Column(
-
-                        child: Row(
-                          children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text(_radius.toInt().toString() + ' M'),
-                                // Text('100 Mtrs'),
-                                Slider(
-                                  max: 1000,
-                                  min: 100,
-                                  value: _radius,
-                                  activeColor: Color(0xFF6EBAB0),
-                                  inactiveColor: Colors.grey,
-                                  divisions: 12,
-                                  onChanged: (double value) {
-                                    // if (!widget.isRadiusFixed) {
-                                    //   _mapsBloc.dispatch(UpdateRangeValues(radius: value));
-                                    // }
-                                    _changeRadius(value);
-                                    print(value);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      ),
-                      Positioned (
-                        bottom: 20.0,
-                        left: 5.0,
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            Navigator.of(context).pop({
-                              'location': LocationResult(
-                                latLng: locationProvider.lastIdleLocation,
-                                address: _address,
-                                placeId: _placeId,
-                              )
-                            });
-                          },
-                          child: widget.resultCardConfirmIcon ??
-                              Icon(Icons.arrow_forward),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-      ),
-    );
-  }
-
-
   Widget locationCard() {
     return Align(
       alignment: widget.resultCardAlignment ?? Alignment.bottomCenter,
@@ -433,6 +342,7 @@ class MapPickerState extends State<MapPicker> {
                         latLng: locationProvider.lastIdleLocation,
                         address: _address,
                         placeId: _placeId,
+                        radius: _radius,
                       )
                     });
                   },
