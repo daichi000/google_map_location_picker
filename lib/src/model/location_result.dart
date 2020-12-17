@@ -12,7 +12,7 @@ class LocationResult {
 
   /// Latitude/Longitude of the selected location.
   LatLng latLng;
-  String radius;
+  double radius;
 
   LocationResult({this.latLng, this.address, this.placeId, this.radius});
 
