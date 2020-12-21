@@ -297,8 +297,8 @@ class MapPickerState extends State<MapPicker> {
                     Text(_radius.toInt().toString() + ' M'),
                     // Text('100 Mtrs'),
                     Slider(
-                      max: 1000,
-                      min: 100,
+                      max: 500,
+                      min: 50,
                       value: _radius,
                       activeColor: Color(0xFF6EBAB0),
                       inactiveColor: Colors.grey,
