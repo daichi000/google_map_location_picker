@@ -336,7 +336,7 @@ class MapPickerState extends State<MapPicker> {
                 // ),
                 // Spacer(),
                 FloatingActionButton(
-                  backgroundColor: Color(0xFF44726B),
+                  backgroundColor: Color(0xFF6EBAB0),
                   onPressed: () {
                     Navigator.of(context).pop({
                       'location': LocationResult(
