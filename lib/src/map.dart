@@ -336,6 +336,7 @@ class MapPickerState extends State<MapPicker> {
                 // ),
                 // Spacer(),
                 FloatingActionButton(
+                  backgroundColor: Color(0xFF44726B),
                   onPressed: () {
                     Navigator.of(context).pop({
                       'location': LocationResult(
@@ -360,7 +361,12 @@ class MapPickerState extends State<MapPicker> {
                     builder: (context, data) {
                       _address = data["address"];
                       _placeId = data["placeId"];
-                      return Icon(Icons.arrow_forward);
+                      // return Icon(Icons.arrow_forward);
+                      return RaisedButton(
+                        child: Text('決定'),
+                        color: Color(0xFF44726B),
+                        onPressed: null
+                      );
                     },
                   ),
                 ),
