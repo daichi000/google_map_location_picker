@@ -439,10 +439,10 @@ class MapPickerState extends State<MapPicker> {
         builder: (context) {
           return AlertDialog(
             title: Text(S.of(context)?.access_to_location_denied ??
-                'Access to location denied'),
+                '位置情報が許可されていません'),
             content: Text(
                 S.of(context)?.allow_access_to_the_location_services ??
-                    'Allow access to the location services.'),
+                    '端末の設定画面から位置情報を常に許可に変更してください'),
             actions: <Widget>[
               FlatButton(
                 child: Text(S.of(context)?.ok ?? 'Ok'),
